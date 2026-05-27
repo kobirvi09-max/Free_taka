@@ -7,7 +7,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <script>(function(s){s.dataset.zone='11062752',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </head>
 <body>
 
@@ -82,29 +81,27 @@
             </div>
             <div class="input-group">
                 <label>অ্যাকাউন্ট নাম্বার</label>
-                <input type="number" placeholder="017XXXXXXXX">
+                <input type="number" id="w-number" placeholder="017XXXXXXXX">
             </div>
             <div class="input-group">
                 <label>পরিমাণ (Amount)</label>
-                <input type="number" placeholder="2000">
+                <input type="number" id="w-amount" placeholder="2000">
             </div>
-            <button class="action-btn" style="background: #a855f7;">Request Withdraw</button>
+            <button class="action-btn" style="background: #a855f7;" onclick="requestWithdraw()">Request Withdraw</button>
+        </div>
+        
+        <div class="withdraw-card" style="margin-top: 20px; padding: 15px; background: #fff; border-radius: 10px;">
+            <h3>উইথড্র স্ট্যাটাস</h3>
+            <div id="withdraw-status" style="margin-top: 10px;">
+                <p style="color: #666;">কোনো রিকোয়েস্ট পেন্ডিং নেই।</p>
+            </div>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchScreen('home-screen', this)">
-            <i class="fa-solid fa-house"></i>
-            <span>HOME</span>
-        </div>
-        <div class="nav-item" onclick="switchScreen('task-screen', this)">
-            <i class="fa-solid fa-crown"></i>
-            <span>TASK</span>
-        </div>
-        <div class="nav-item" onclick="switchScreen('withdraw-screen', this)">
-            <i class="fa-solid fa-gift"></i>
-            <span>WITHDRAW</span>
-        </div>
+        <div class="nav-item active" onclick="switchScreen('home-screen', this)"><i class="fa-solid fa-house"></i><span>HOME</span></div>
+        <div class="nav-item" onclick="switchScreen('task-screen', this)"><i class="fa-solid fa-crown"></i><span>TASK</span></div>
+        <div class="nav-item" onclick="switchScreen('withdraw-screen', this)"><i class="fa-solid fa-gift"></i><span>WITHDRAW</span></div>
     </div>
 
     <script>
@@ -121,67 +118,3 @@
                 photo.src = tg.initDataUnsafe.user.photo_url;
                 photo.style.display = 'block';
             }
-        }
-
-        const baseBotUrl = "https://t.me/Freetaka12bot/app";
-        document.getElementById('ref-url').value = baseBotUrl + "?startapp=" + (tg.initDataUnsafe?.user?.id || "guest");
-
-        let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
-        let adsWatched = parseInt(localStorage.getItem('ads_watched')) || 0;
-        let totalRefers = parseInt(localStorage.getItem('total_refers')) || 0;
-        let channelClaimed = localStorage.getItem('channel_claimed') === 'true';
-
-        if(channelClaimed) {
-            document.getElementById('join-btn').style.display = 'none';
-            document.getElementById('claim-btn').style.display = 'none';
-        }
-
-        function updateUI() {
-            document.getElementById('user-balance').innerText = balance.toFixed(2);
-            document.getElementById('total-balance').innerText = balance.toFixed(2);
-            document.getElementById('ads-count').innerText = adsWatched;
-            document.getElementById('refer-count').innerText = totalRefers;
-        }
-        updateUI();
-
-        function enableClaim() {
-            if(!channelClaimed) document.getElementById('claim-btn').style.display = 'block';
-        }
-
-        function claimBonus() {
-            balance += 80.00;
-            channelClaimed = true;
-            localStorage.setItem('user_balance', balance);
-            localStorage.setItem('channel_claimed', 'true');
-            document.getElementById('join-btn').style.display = 'none';
-            document.getElementById('claim-btn').style.display = 'none';
-            updateUI();
-            alert("অভিনন্দন! আপনি ৳৮০ বোনাস পেয়েছেন।");
-        }
-
-        function copyRef() {
-            const copyText = document.getElementById("ref-url");
-            copyText.select();
-            document.execCommand("copy");
-            alert("লিংক কপি হয়েছে!");
-        }
-
-        function showMonetagAd() {
-            if (adsWatched >= 15) { alert("আজকের ১৫টি বিজ্ঞাপনের লিমিট শেষ!"); return; }
-            balance += 7.00;
-            adsWatched += 1;
-            localStorage.setItem('user_balance', balance);
-            localStorage.setItem('ads_watched', adsWatched);
-            updateUI();
-            alert("অভিনন্দন! আপনি বিজ্ঞাপনটি দেখেছেন এবং ৳৭ পেয়েছেন।");
-        }
-
-        function switchScreen(screenId, element) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
-            element.classList.add('active');
-        }
-    </script>
-</body>
-</html>
