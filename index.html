@@ -110,6 +110,7 @@
         tg.ready();
         tg.expand();
         
+        // প্রোফাইল পিকচার লজিক
         if(tg.initDataUnsafe && tg.initDataUnsafe.user) {
             document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
             if(tg.initDataUnsafe.user.photo_url) {
@@ -171,7 +172,7 @@
                     localStorage.setItem('withdraw_status', 'Pending');
                     localStorage.setItem('withdraw_amount', amount);
                     loadWithdrawStatus();
-                    alert("রিকোয়েস্ট পাঠানো হয়েছে!");
+                    alert("আপনার রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!");
                 }
             });
         }
@@ -186,7 +187,7 @@
             document.getElementById('join-btn').style.display = 'none';
             document.getElementById('claim-btn').style.display = 'none';
             updateUI();
-            alert("৳৮০ বোনাস পেয়েছেন!");
+            alert("অভিনন্দন! আপনি ৳৮০ বোনাস পেয়েছেন।");
         }
 
         function copyRef() {
@@ -197,12 +198,13 @@
         }
 
         function showMonetagAd() {
-            if (adsWatched >= 15) { alert("লিমিট শেষ!"); return; }
+            if (adsWatched >= 15) { alert("আজকের ১৫টি বিজ্ঞাপনের লিমিট শেষ!"); return; }
             balance += 7.00;
             adsWatched += 1;
             localStorage.setItem('user_balance', balance);
             localStorage.setItem('ads_watched', adsWatched);
             updateUI();
+            alert("অভিনন্দন! বিজ্ঞাপনটি দেখার জন্য ৳৭ যোগ হয়েছে।");
         }
 
         function switchScreen(screenId, element) {
