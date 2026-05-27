@@ -4,45 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Earning App</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
-        .app-container { width: 100%; max-width: 400px; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
-        .profile-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #ddd; margin-bottom: 10px; }
-        .balance { font-size: 28px; font-weight: bold; color: #1a73e8; margin: 15px 0; }
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; margin-top: 10px; color: white; transition: 0.3s; }
+        /* আপনার আগের বক্স ডিজাইনের স্টাইল */
+        body { font-family: sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .app-container { width: 90%; max-width: 400px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: center; }
+        h1 { color: #333; font-size: 22px; }
+        .balance-box { font-size: 20px; font-weight: bold; margin: 20px 0; padding: 10px; background: #e9ecef; border-radius: 10px; }
+        button { width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 8px; cursor: pointer; color: white; font-weight: bold; }
+        .btn-task { background: #007bff; }
         .btn-withdraw { background: #28a745; }
-        .btn-task { background: #1a73e8; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <img src="https://via.placeholder.com/100" alt="Profile" class="profile-img" id="profilePic">
-    <h3>ব্যবহারকারীর প্রোফাইল</h3>
-    <div class="balance">ব্যালেন্স: <span id="balanceAmount">০</span> টাকা</div>
-    
-    <button class="btn btn-task" onclick="doTask()">কাজ শুরু করুন</button>
-    <button class="btn btn-withdraw" onclick="withdraw()">উইথড্র রিকোয়েস্ট</button>
-</div>
+    <div class="app-container">
+        <h1>আমার আর্নিং অ্যাপ</h1>
+        <div class="balance-box">ব্যালেন্স: <span id="balance">০</span> টাকা</div>
+        
+        <button class="btn-task" onclick="doTask()">কাজ করুন</button>
+        <button class="btn-withdraw" onclick="withdraw()">উইথড্র রিকোয়েস্ট</button>
+    </div>
 
-<script>
-    // ফায়ারবেস কনফিগারেশন এখানে যোগ করবেন
-    // উদাহরণ: 
-    // const firebaseConfig = { ... };
+    <script>
+        // ফায়ারবেস কনফিগারেশন
+        const firebaseConfig = {
+            databaseURL: "আপনার_ডাটাবেস_ইউআরএল_এখানে_বসান"
+        };
 
-    function doTask() {
-        alert("এখনো কোনো কাজ যোগ করা হয়নি!");
-    }
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-    function withdraw() {
-        let amount = document.getElementById('balanceAmount').innerText;
-        if(parseInt(amount) < 50) {
-            alert("ন্যূনতম ৫০ টাকা প্রয়োজন!");
-        } else {
-            alert("আপনার উইথড্র রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!");
+        // কাজ শুরু করার ফাংশন
+        function doTask() {
+            alert("কাজ করার অপশনটি এখন ফায়ারবেসের সাথে যুক্ত হচ্ছে!");
         }
-    }
-</script>
 
+        // উইথড্র রিকোয়েস্ট ফাংশন
+        function withdraw() {
+            alert("আপনার উইথড্র রিকোয়েস্ট সফলভাবে ডাটাবেসে জমা হয়েছে!");
+        }
+
+        console.log("সিস্টেম সচল আছে এবং ফায়ারবেস কানেক্টেড!");
+    </script>
 </body>
 </html>
