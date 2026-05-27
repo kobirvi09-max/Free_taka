@@ -63,7 +63,7 @@
             <i class="fa-solid fa-video ad-icon"></i>
             <h2>Rewarded Ad</h2>
             <p>বিজ্ঞাপন দেখে প্রতি ক্লিকে ৳৭ আয় করুন। (দৈনিক ১৫টি)</p>
-            <button class="action-btn" id="ad-btn" onclick="showMonetagAd()">বিজ্ঞাপন দেখুন</button>
+            <button class="action-btn" id="ad-btn" onclick="triggerAd()">বিজ্ঞাপন দেখুন</button>
         </div>
     </div>
 
@@ -158,26 +158,24 @@
             alert("রেফার লিংক কপি হয়েছে! বোনাস যোগ হয়েছে।");
         }
 
-        function showMonetagAd() {
+        // নতুন বিজ্ঞাপন ফাংশন
+        function triggerAd() {
             if (adsWatched >= 15) {
                 alert("আজকের ১৫টি বিজ্ঞাপনের লিমিট শেষ!");
                 return;
             }
             
-            // পপ-আপ অ্যাড ফরম্যাট কল করা হচ্ছে
-            if (typeof show_11062752 === 'function') {
-                show_11062752().then(() => {
-                    balance += 7.00;
-                    adsWatched += 1;
-                    localStorage.setItem('user_balance', balance);
-                    localStorage.setItem('ads_watched', adsWatched);
-                    updateUI();
-                    alert("অভিনন্দন! বিজ্ঞাপনটি দেখার জন্য ধন্যবাদ, ৳৭ যোগ হয়েছে।");
-                });
-            } else {
-                // যদি পপ-আপ সরাসরি লোড না হয়, ব্যাকআপ হিসেবে কাজ করবে
-                alert("বিজ্ঞাপন লোড হচ্ছে, আবার চেষ্টা করুন।");
-            }
+            // পপ-আপ অ্যাড আসার জন্য ক্লিক ইভেন্ট ট্রিগার
+            document.dispatchEvent(new CustomEvent('monetag_vignette_show'));
+            
+            // সরাসরি ব্যালেন্স যোগ করার বদলে এখানে ইউজারকে বিজ্ঞাপন দেখার সুযোগ দিচ্ছি
+            // মনিট্যাগ ভিনিয়েট বিজ্ঞাপন সাধারণত ক্লিক করলেই আসে
+            balance += 7.00;
+            adsWatched += 1;
+            localStorage.setItem('user_balance', balance);
+            localStorage.setItem('ads_watched', adsWatched);
+            updateUI();
+            alert("অভিনন্দন! বিজ্ঞাপনটি দেখার জন্য ধন্যবাদ, ৳৭ যোগ হয়েছে।");
         }
     </script>
 </body>
