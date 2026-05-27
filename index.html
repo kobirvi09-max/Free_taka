@@ -7,37 +7,74 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <script>(function(s){s.dataset.zone='11062752',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </head>
 <body>
 
-    <div id="task-screen" class="screen active">
-        <div class="ad-card">
-            <i class="fa-solid fa-video ad-icon"></i>
-            <h2>Rewarded Ad</h2>
-            <p>বিজ্ঞাপন দেখুন এবং টাকা আয় করুন।</p>
-            <button class="action-btn" id="ad-btn" onclick="addBalance()">বিজ্ঞাপন দেখুন</button>
+    <div id="home-screen" class="screen active">
+        <div class="user-profile">
+            <div class="user-info">
+                <h3>ব্যবহারকারী</h3>
+                <p>ব্যালেন্স: ৳<span id="user-balance">0.00</span></p>
+            </div>
+        </div>
+        <div class="balance-card">
+            <h1>৳<span id="total-balance">0.00</span></h1>
+        </div>
+        <div class="stats-container">
+            <div class="stat-box">
+                <p>অ্যাড দেখা</p>
+                <h2><span id="ads-count">0</span> / 15</h2>
+            </div>
         </div>
     </div>
 
-    <script>
-        function addBalance() {
-            let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
-            let adsWatched = parseInt(localStorage.getItem('ads_watched')) || 0;
+    <div id="task-screen" class="screen">
+        <div class="ad-card">
+            <h2>Rewarded Ad</h2>
+            <p>বিজ্ঞাপন দেখুন এবং ৭ টাকা আয় করুন।</p>
+            <button class="action-btn" onclick="addBalance()">বিজ্ঞাপন দেখুন</button>
+        </div>
+    </div>
 
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchScreen('home-screen', this)">HOME</div>
+        <div class="nav-item" onclick="switchScreen('task-screen', this)">TASK</div>
+    </div>
+
+    <script>
+        // আগের ডিজাইন এবং সিস্টেম লোড করার ফাংশন
+        let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
+        let adsWatched = parseInt(localStorage.getItem('ads_watched')) || 0;
+
+        function updateUI() {
+            document.getElementById('user-balance').innerText = balance.toFixed(2);
+            document.getElementById('total-balance').innerText = balance.toFixed(2);
+            document.getElementById('ads-count').innerText = adsWatched;
+        }
+        updateUI();
+
+        function switchScreen(screenId, element) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // বিজ্ঞাপনের জন্য বাটন ফাংশন
+        function addBalance() {
             if (adsWatched >= 15) {
                 alert("আজকের লিমিট শেষ!");
                 return;
             }
 
-            // ব্যালেন্স যোগ করা হচ্ছে
+            // বিজ্ঞাপন খোলার লিঙ্ক (কোনো সাদা স্ক্রিন আসবে না)
+            window.open("https://n6wxm.com/11062752", "_blank");
+
+            // ব্যালেন্স যোগ করার সহজ নিয়ম
             balance += 7.00;
             adsWatched += 1;
             localStorage.setItem('user_balance', balance);
             localStorage.setItem('ads_watched', adsWatched);
-            
-            alert("অভিনন্দন! আপনার ব্যালেন্সে ৭ টাকা যোগ হয়েছে।");
-            location.reload();
+            updateUI();
+            alert("বিজ্ঞাপন দেখা হয়েছে! ৭ টাকা যোগ হয়েছে।");
         }
     </script>
 </body>
