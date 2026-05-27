@@ -7,7 +7,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <script>(function(s){s.dataset.zone='11062752',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </head>
 <body>
 
@@ -42,7 +41,7 @@
         </div>
 
         <div class="refer-box">
-            <p><i class="fa-solid fa-share-nodes"></i> বন্ধুদের রেফার করলেই আপনি পাবেন <b>৳৫০</b> এবং আপনার বন্ধু জয়েন করলেই পাবে <b>৳২৫</b> বোনাস! 🎁</p>
+            <p><i class="fa-solid fa-share-nodes"></i> বন্ধুদের রেফার করুন! 🎁</p>
             <div class="ref-link-area">
                 <input type="text" id="ref-url" readonly>
                 <button onclick="copyRef()"><i class="fa-solid fa-copy"></i></button>
@@ -53,9 +52,12 @@
     <div id="task-screen" class="screen">
         <div class="ad-card" style="border-color: #38bdf8; margin-bottom: 15px;">
             <i class="fa-brands fa-telegram ad-icon" style="color: #38bdf8;"></i>
-            <h2>অফিসিয়াল চ্যানেলে জয়েন</h2>
-            <p>আমাদের টেলিগ্রাম চ্যানেলে জয়েন করে ৳৮০ বোনাস নিন! 🚀</p>
-            <a href="https://t.me/AndroidBdTools6" target="_blank" class="action-btn" style="background: #38bdf8; display: block; text-decoration: none; text-align: center;">চ্যানেলে জয়েন করুন</a>
+            <h2 id="channel-title">অফিসিয়াল চ্যানেলে জয়েন</h2>
+            <p id="channel-desc">আমাদের টেলিগ্রাম চ্যানেলে জয়েন করে ৳৮০ বোনাস নিন! 🚀</p>
+            
+            <a id="join-btn" href="https://t.me/AndroidBdTools6" target="_blank" onclick="enableClaim()" class="action-btn" style="background: #38bdf8; display: block; text-decoration: none; text-align: center;">চ্যানেলে জয়েন করুন</a>
+            
+            <button id="claim-btn" class="action-btn" style="background: #22c55e; display: none; width: 100%; margin-top: 10px;" onclick="claimBonus()">CLAIM NOW</button>
         </div>
 
         <div class="ad-card">
@@ -89,18 +91,9 @@
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchScreen('home-screen', this)">
-            <i class="fa-solid fa-house"></i>
-            <span>HOME</span>
-        </div>
-        <div class="nav-item" onclick="switchScreen('task-screen', this)">
-            <i class="fa-solid fa-crown"></i>
-            <span>TASK</span>
-        </div>
-        <div class="nav-item" onclick="switchScreen('withdraw-screen', this)">
-            <i class="fa-solid fa-gift"></i>
-            <span>WITHDRAW</span>
-        </div>
+        <div class="nav-item active" onclick="switchScreen('home-screen', this)"><i class="fa-solid fa-house"></i><span>HOME</span></div>
+        <div class="nav-item" onclick="switchScreen('task-screen', this)"><i class="fa-solid fa-crown"></i><span>TASK</span></div>
+        <div class="nav-item" onclick="switchScreen('withdraw-screen', this)"><i class="fa-solid fa-gift"></i><span>WITHDRAW</span></div>
     </div>
 
     <script>
@@ -109,16 +102,20 @@
         tg.expand();
         
         let userId = tg.initDataUnsafe?.user?.id || "guest";
-        if(tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
-        }
+        document.getElementById('username').innerText = tg.initDataUnsafe?.user?.first_name || "ব্যবহারকারী";
 
-        const baseBotUrl = "https://t.me/Freetaka12bot/app";
-        document.getElementById('ref-url').value = baseBotUrl + "?startapp=" + userId;
+        document.getElementById('ref-url').value = "https://t.me/Freetaka12bot/app?startapp=" + userId;
 
         let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
         let adsWatched = parseInt(localStorage.getItem('ads_watched')) || 0;
         let totalRefers = parseInt(localStorage.getItem('total_refers')) || 0;
+        let channelClaimed = localStorage.getItem('channel_claimed') === 'true';
+
+        // পেজ লোড হলে চেক করা ক্লেম করা আছে কিনা
+        if(channelClaimed) {
+            document.getElementById('join-btn').style.display = 'none';
+            document.getElementById('claim-btn').style.display = 'none';
+        }
 
         function updateUI() {
             document.getElementById('user-balance').innerText = balance.toFixed(2);
@@ -128,14 +125,25 @@
         }
         updateUI();
 
-        function switchScreen(screenId, element) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
-            element.classList.add('active');
+        // জয়েন বাটনে ক্লিক করলে ক্লেম বাটন দেখাবে
+        function enableClaim() {
+            if(!channelClaimed) {
+                document.getElementById('claim-btn').style.display = 'block';
+            }
         }
 
-        // কপি ফাংশন থেকে বোনাস ও রেফার কাউন্টের কোড মুছে ফেলা হয়েছে
+        // ক্লেম করার ফাংশন
+        function claimBonus() {
+            balance += 80.00;
+            channelClaimed = true;
+            localStorage.setItem('user_balance', balance);
+            localStorage.setItem('channel_claimed', 'true');
+            document.getElementById('join-btn').style.display = 'none';
+            document.getElementById('claim-btn').style.display = 'none';
+            updateUI();
+            alert("অভিনন্দন! আপনি ৳৮০ বোনাস পেয়েছেন।");
+        }
+
         function copyRef() {
             const copyText = document.getElementById("ref-url");
             copyText.select();
@@ -144,16 +152,20 @@
         }
 
         function showMonetagAd() {
-            if (adsWatched >= 15) {
-                alert("আজকের ১৫টি বিজ্ঞাপনের লিমিট শেষ!");
-                return;
-            }
+            if (adsWatched >= 15) { alert("লিমিট শেষ!"); return; }
             balance += 7.00;
             adsWatched += 1;
             localStorage.setItem('user_balance', balance);
             localStorage.setItem('ads_watched', adsWatched);
             updateUI();
-            alert("অভিনন্দন! আপনি বিজ্ঞাপনটি দেখেছেন এবং ৳৭ পেয়েছেন।");
+            alert("৳৭ যোগ হয়েছে!");
+        }
+
+        function switchScreen(screenId, element) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            element.classList.add('active');
         }
     </script>
 </body>
