@@ -7,7 +7,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-
     <script>(function(s){s.dataset.zone='11062752',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </head>
 <body>
@@ -43,7 +42,7 @@
         </div>
 
         <div class="refer-box">
-            <p><i class="fa-solid fa-share-nodes"></i> বন্ধুদের রেফার করলেই আপনি পাবেন <b>৳৫০</b> এবং আপনার বন্ধু জয়েন করলেই পাবে <b>৳২৫</b> বোনাস! 🎁</p>
+            <p><i class="fa-solid fa-share-nodes"></i> বন্ধুদের রেফার করুন! 🎁</p>
             <div class="ref-link-area">
                 <input type="text" id="ref-url" value="https://t.me/Freetaka12bot/app" readonly>
                 <button onclick="copyRef()"><i class="fa-solid fa-copy"></i></button>
@@ -55,15 +54,15 @@
         <div class="ad-card" style="border-color: #38bdf8; margin-bottom: 15px;">
             <i class="fa-brands fa-telegram ad-icon" style="color: #38bdf8;"></i>
             <h2>অফিসিয়াল চ্যানেলে জয়েন</h2>
-            <p>আমাদের টেলিগ্রাম চ্যানেলে জয়েন করে ৳৮০ বোনাস নিন! 🚀</p>
+            <p>চ্যানেলে জয়েন করে বোনাস নিন! 🚀</p>
             <a href="https://t.me/AndroidBdTools6" target="_blank" class="action-btn" style="background: #38bdf8; display: block; text-decoration: none; text-align: center;">চ্যানেলে জয়েন করুন</a>
         </div>
 
         <div class="ad-card">
             <i class="fa-solid fa-video ad-icon"></i>
             <h2>Rewarded Ad</h2>
-            <p>বিজ্ঞাপন দেখে প্রতি ক্লিকে ৳৭ আয় করুন। (দৈনিক ১৫টি)</p>
-            <button class="action-btn" id="ad-btn" onclick="triggerAd()">বিজ্ঞাপন দেখুন</button>
+            <p>বিজ্ঞাপন দেখুন এবং আয় করুন (প্রতি ক্লিকে ৭ টাকা)।</p>
+            <button class="action-btn" id="ad-btn" onclick="openAd()">বিজ্ঞাপন দেখুন</button>
         </div>
     </div>
 
@@ -73,8 +72,8 @@
             <div class="input-group">
                 <label>মেথড সিলেক্ট করুন</label>
                 <select id="method">
-                    <option value="bkash">BKash (মিনিমাম ২০০০)</option>
-                    <option value="nagad">Nagad (মিনিমাম ২০০০)</option>
+                    <option value="bkash">BKash</option>
+                    <option value="nagad">Nagad</option>
                 </select>
             </div>
             <div class="input-group">
@@ -90,18 +89,9 @@
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchScreen('home-screen', this)">
-            <i class="fa-solid fa-house"></i>
-            <span>HOME</span>
-        </div>
-        <div class="nav-item" onclick="switchScreen('task-screen', this)">
-            <i class="fa-solid fa-crown"></i>
-            <span>TASK</span>
-        </div>
-        <div class="nav-item" onclick="switchScreen('withdraw-screen', this)">
-            <i class="fa-solid fa-gift"></i>
-            <span>WITHDRAW</span>
-        </div>
+        <div class="nav-item active" onclick="switchScreen('home-screen', this)"><i class="fa-solid fa-house"></i><span>HOME</span></div>
+        <div class="nav-item" onclick="switchScreen('task-screen', this)"><i class="fa-solid fa-crown"></i><span>TASK</span></div>
+        <div class="nav-item" onclick="switchScreen('withdraw-screen', this)"><i class="fa-solid fa-gift"></i><span>WITHDRAW</span></div>
     </div>
 
     <script>
@@ -109,26 +99,10 @@
         tg.ready();
         tg.expand();
         
-        let userId = "guest";
-        if(tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            userId = tg.initDataUnsafe.user.id;
-            document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
-        }
-
-        const baseBotUrl = "https://t.me/Freetaka12bot/app";
-        document.getElementById('ref-url').value = baseBotUrl + "?startapp=" + userId;
-
+        // স্টেট ম্যানেজমেন্ট
         let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
         let adsWatched = parseInt(localStorage.getItem('ads_watched')) || 0;
-        let lastAdDate = localStorage.getItem('last_ad_date') || "";
         let totalRefers = parseInt(localStorage.getItem('total_refers')) || 0;
-
-        const todayStr = new Date().toDateString();
-        if (lastAdDate !== todayStr) {
-            adsWatched = 0;
-            localStorage.setItem('ads_watched', 0);
-            localStorage.setItem('last_ad_date', todayStr);
-        }
 
         function updateUI() {
             document.getElementById('user-balance').innerText = balance.toFixed(2);
@@ -145,37 +119,30 @@
             element.classList.add('active');
         }
 
-        function copyRef() {
-            const copyText = document.getElementById("ref-url");
-            copyText.select();
-            document.execCommand("copy");
-            
-            totalRefers += 1;
-            balance += 50.00;
-            localStorage.setItem('total_refers', totalRefers);
-            localStorage.setItem('user_balance', balance);
-            updateUI();
-            alert("রেফার লিংক কপি হয়েছে! বোনাস যোগ হয়েছে।");
-        }
-
-        // নতুন বিজ্ঞাপন ফাংশন
-        function triggerAd() {
+        function openAd() {
             if (adsWatched >= 15) {
-                alert("আজকের ১৫টি বিজ্ঞাপনের লিমিট শেষ!");
+                alert("আজকের লিমিট শেষ!");
                 return;
             }
             
-            // পপ-আপ অ্যাড আসার জন্য ক্লিক ইভেন্ট ট্রিগার
-            document.dispatchEvent(new CustomEvent('monetag_vignette_show'));
+            // বিজ্ঞাপনটি খোলা হবে
+            window.open("https://n6wxm.com/11062752", "_blank");
             
-            // সরাসরি ব্যালেন্স যোগ করার বদলে এখানে ইউজারকে বিজ্ঞাপন দেখার সুযোগ দিচ্ছি
-            // মনিট্যাগ ভিনিয়েট বিজ্ঞাপন সাধারণত ক্লিক করলেই আসে
-            balance += 7.00;
-            adsWatched += 1;
-            localStorage.setItem('user_balance', balance);
-            localStorage.setItem('ads_watched', adsWatched);
-            updateUI();
-            alert("অভিনন্দন! বিজ্ঞাপনটি দেখার জন্য ধন্যবাদ, ৳৭ যোগ হয়েছে।");
+            // বিজ্ঞাপন দেখা শেষে কনফার্মেশন নেওয়া হবে
+            setTimeout(() => {
+                if(confirm("আপনি কি বিজ্ঞাপনটি দেখেছেন? হ্যাঁ বাটনে ক্লিক করুন ব্যালেন্স পাওয়ার জন্য।")) {
+                    balance += 7.00;
+                    adsWatched += 1;
+                    localStorage.setItem('user_balance', balance);
+                    localStorage.setItem('ads_watched', adsWatched);
+                    updateUI();
+                    alert("অভিনন্দন! ৭ টাকা যোগ হয়েছে।");
+                }
+            }, 3000); // ৩ সেকেন্ড পর কনফার্মেশন আসবে
+        }
+
+        function copyRef() {
+            alert("রেফার লিংক কপি হয়েছে!");
         }
     </script>
 </body>
