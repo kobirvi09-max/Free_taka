@@ -164,13 +164,20 @@
                 return;
             }
             
-            // বিজ্ঞাপন কল করার পর ব্যালেন্স যোগ হবে
-            balance += 7.00;
-            adsWatched += 1;
-            localStorage.setItem('user_balance', balance);
-            localStorage.setItem('ads_watched', adsWatched);
-            updateUI();
-            alert("অভিনন্দন! আপনি বিজ্ঞাপনটি দেখেছেন এবং ৳৭ পেয়েছেন।");
+            // পপ-আপ অ্যাড ফরম্যাট কল করা হচ্ছে
+            if (typeof show_11062752 === 'function') {
+                show_11062752().then(() => {
+                    balance += 7.00;
+                    adsWatched += 1;
+                    localStorage.setItem('user_balance', balance);
+                    localStorage.setItem('ads_watched', adsWatched);
+                    updateUI();
+                    alert("অভিনন্দন! বিজ্ঞাপনটি দেখার জন্য ধন্যবাদ, ৳৭ যোগ হয়েছে।");
+                });
+            } else {
+                // যদি পপ-আপ সরাসরি লোড না হয়, ব্যাকআপ হিসেবে কাজ করবে
+                alert("বিজ্ঞাপন লোড হচ্ছে, আবার চেষ্টা করুন।");
+            }
         }
     </script>
 </body>
