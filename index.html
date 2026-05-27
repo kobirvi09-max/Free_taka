@@ -1,23 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="bn">
 <head>
-    <title>Firebase App</title>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Earning App</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
+        .app-container { width: 100%; max-width: 400px; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
+        .profile-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #ddd; margin-bottom: 10px; }
+        .balance { font-size: 28px; font-weight: bold; color: #1a73e8; margin: 15px 0; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; margin-top: 10px; color: white; transition: 0.3s; }
+        .btn-withdraw { background: #28a745; }
+        .btn-task { background: #1a73e8; }
+    </style>
 </head>
 <body>
-    <h1>Firebase ডাটাবেস সংযোগ</h1>
-    <script>
-        // আপনার Firebase কনফিগারেশন এখানে বসান
-        const firebaseConfig = {
-            databaseURL: "আপনার_ডাটাবেস_ইউআরএল_এখানে_দিন"
-        };
 
-        // Firebase ইনিশিয়ালাইজ করা
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+<div class="app-container">
+    <img src="https://via.placeholder.com/100" alt="Profile" class="profile-img" id="profilePic">
+    <h3>ব্যবহারকারীর প্রোফাইল</h3>
+    <div class="balance">ব্যালেন্স: <span id="balanceAmount">০</span> টাকা</div>
+    
+    <button class="btn btn-task" onclick="doTask()">কাজ শুরু করুন</button>
+    <button class="btn btn-withdraw" onclick="withdraw()">উইথড্র রিকোয়েস্ট</button>
+</div>
 
-        console.log("Firebase সংযোগ সফল হয়েছে!");
-    </script>
+<script>
+    // ফায়ারবেস কনফিগারেশন এখানে যোগ করবেন
+    // উদাহরণ: 
+    // const firebaseConfig = { ... };
+
+    function doTask() {
+        alert("এখনো কোনো কাজ যোগ করা হয়নি!");
+    }
+
+    function withdraw() {
+        let amount = document.getElementById('balanceAmount').innerText;
+        if(parseInt(amount) < 50) {
+            alert("ন্যূনতম ৫০ টাকা প্রয়োজন!");
+        } else {
+            alert("আপনার উইথড্র রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!");
+        }
+    }
+</script>
+
 </body>
 </html>
